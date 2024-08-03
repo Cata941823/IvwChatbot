@@ -4,9 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { InteractionService } from 'src/app/services/interaction/interaction.service';
 import { StocksService } from 'src/app/services/stocks/stocks.service';
 import { QuestionType } from 'src/app/types/question-type.type';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
-import domtoimage from 'dom-to-image';
 
 @Component({
   selector: 'app-chat-structure',
@@ -68,8 +65,8 @@ export class ChatStructureComponent {
   }
 
   exportChat() {
-    var originalContents = document.body.innerHTML;
-    var printReport= document.querySelector('.body')!.innerHTML;
+    let originalContents = document.body.innerHTML;
+    let printReport= document.querySelector('.body')!.innerHTML;
     document.body.innerHTML = printReport;
     window.print();
     document.body.innerHTML = originalContents;

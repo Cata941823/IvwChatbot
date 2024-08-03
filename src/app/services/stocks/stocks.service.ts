@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class StocksService {
-  private apiUrl = 'http://localhost:3000/stocks';
+  private apiUrl = 'https://ivwchatbot-default-rtdb.europe-west1.firebasedatabase.app/stocks.json';
 
   constructor(private http: HttpClient) { }
 
