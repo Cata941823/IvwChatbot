@@ -1,0 +1,15 @@
+{
+    "WELCOME_MESSAGE": "Bună ziua! Bine ați venit la LSEG. Sunt aici să vă ajut.",
+    "SELECT_STOCK_GROUP_MESSAGE": "Vă rog să selectați o bursă de valori.",
+    "SELECT_STOCK_ITEM_MESSAGE": "Vă rog să selectați o acțiune.",
+    "PRICE_MESSAGE": {
+        "FIRST_TEXT": "Prețul acțiunii ",
+        "SECOND_TEXT": " este ",
+        "THIRD_TEXT": ". Te rog să alegi o opțiune."
+    },
+    "OPTIONS": {
+        "MAIN_MENU": "Meniu principal",
+        "GO_BACK": "Întoarce-te"
+    },
+    "MESSAGE_INPUT": "Vă rog să alegeți o opțiune."
+}

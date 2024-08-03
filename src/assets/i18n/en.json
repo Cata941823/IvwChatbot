@@ -1,0 +1,10 @@
+{
+    "WELCOME_MESSAGE": "Hello! Welcome to LSEG. I'm here to help you.",
+    "SELECT_STOCK_GROUP_MESSAGE": "Please select a Stock Exchange.",
+    "SELECT_STOCK_ITEM_MESSAGE": "Please select a stock.",
+    "OPTIONS": {
+        "MAIN_MENU": "Main menu",
+        "GO_BACK": "Go Back"
+    },
+    "MESSAGE_INPUT": "Please pick an option."
+}

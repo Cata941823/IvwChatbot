@@ -18,8 +18,8 @@
 
         <!-- TRANSLATION -->
         <div class="translation">
-            <div class="fixed-size-icon">
-                <i (click)="changeLanguage()" class="material-icons">language</i>
+            <div class="fixed-size-icon" (click)="changeLanguage(language.code, language.language, language.flag)">
+                <i class="material-icons">language</i><span>{{(language.code | uppercase)}}</span>
             </div>
         </div>
 
@@ -43,7 +43,7 @@
     <div class="input">
         <form class="chatInputForm">
             <mat-form-field>
-                <input matInput type="text" [formControl]="messageFormControl" placeholder="Please pick an option.">
+                <input matInput type="text" [formControl]="messageFormControl" placeholder="{{('MESSAGE_INPUT' | translate)}}">
                 <button matSuffix mat-icon-button aria-label="Send" (click)="sendMessage()">
                   <mat-icon>send</mat-icon>
                 </button>
