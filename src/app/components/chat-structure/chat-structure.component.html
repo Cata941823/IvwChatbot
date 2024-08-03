@@ -35,7 +35,7 @@
     <!-- CHAT BODY -->
     <div class="body">
         <div *ngFor="let message of chatMessages">
-            <app-chat-message [sentByClient]="message.sentByClient" [message]="message.text" [optionsList]="message.optionsList"></app-chat-message>
+            <app-chat-message [sentByClient]="message.sentByClient" [message]="message.text" [optionsList]="message.optionsList" (selectedOption)="replyToMessage($event)"></app-chat-message>
         </div>
     </div>
 

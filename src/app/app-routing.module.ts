@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ChatStructureComponent } from './chat-structure/chat-structure.component';
+import { ChatStructureComponent } from './components/chat-structure/chat-structure.component';
 
 const routes: Routes = [
   { path: '', component: ChatStructureComponent },

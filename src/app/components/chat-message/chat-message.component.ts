@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-chat-message',
@@ -10,4 +10,9 @@ export class ChatMessageComponent {
   @Input() message: string = '';
   @Input() optionsList: string[] = [];
   
+  @Output() selectedOption = new EventEmitter<string>();
+  
+  selectOption(option: string){
+    this.selectedOption.emit(option);
+  }
 }
