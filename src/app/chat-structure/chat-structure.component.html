@@ -1,0 +1,54 @@
+<!-- CHAT STRUCTURE -->
+<div class="chatStructure">
+
+    <!-- CHAT HEADER -->
+    <div class="header">
+
+        <!-- LOGO -->
+        <div class="logo">
+            <div class="fixed-size-icon">
+                <i class="material-icons">smart_toy</i>
+            </div>
+        </div>
+
+        <!-- TITLE -->
+        <div class="title">
+            <p>LSEG chatbot</p>
+        </div>
+
+        <!-- TRANSLATION -->
+        <div class="translation">
+            <div class="fixed-size-icon">
+                <i (click)="changeLanguage()" class="material-icons">language</i>
+            </div>
+        </div>
+
+        <!-- EXPORT -->
+        <div class="export">
+            <div class="fixed-size-icon">
+                <i (click)="exportChat()" class="material-icons">download</i>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CHAT BODY -->
+    <div class="body">
+        <div *ngFor="let message of chatMessages">
+            <app-chat-message [sentByClient]="message.sentByClient" [message]="message.text" [optionsList]="message.optionsList"></app-chat-message>
+        </div>
+    </div>
+
+    <!-- CHAT INPUT -->
+    <div class="input">
+        <form class="chatInputForm">
+            <mat-form-field>
+                <input matInput type="text" [formControl]="messageFormControl" placeholder="Please pick an option.">
+                <button matSuffix mat-icon-button aria-label="Send" (click)="sendMessage()">
+                  <mat-icon>send</mat-icon>
+                </button>
+            </mat-form-field>
+        </form>
+    </div>
+
+</div>

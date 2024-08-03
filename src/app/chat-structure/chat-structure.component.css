@@ -1,0 +1,99 @@
+.chatStructure {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chatStructure .header {
+    display: flex;
+    flex-direction: row;
+    background-color: #011efe;
+}
+
+.chatStructure .header .logo {
+    flex-grow: 1;
+    color: white;
+}
+
+.chatStructure .header .logo .fixed-size-icon {
+    cursor: default;
+    user-select: none;
+}
+
+.fixed-size-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fixed-size-icon .material-icons {
+    font-size: 6vh;
+}
+
+.chatStructure .header .title {
+    flex-grow: 14;
+    color: white;
+    font-size: 2vh;
+    user-select: none;
+}
+
+.chatStructure .header .export {
+    color: white;
+}
+
+.chatStructure .header .export .fixed-size-icon {
+    cursor: pointer;
+    user-select: none;
+}
+
+.chatStructure .header .translation {
+    color: white;
+}
+
+.chatStructure .header .translation .fixed-size-icon {
+    cursor: pointer;
+    user-select: none;
+}
+
+.chatStructure .body {
+    flex-grow: 13;
+    overflow-y: auto;
+    padding: 1%;
+}
+
+.chatStructure .input {
+    background-color: #eeeeee;
+}
+
+.chatStructure .input .chatInputForm {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+mat-form-field {
+    max-height: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+mat-form-field input {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+mat-form-field button {
+    border: 0px;
+    cursor: pointer;
+}

@@ -1,0 +1,25 @@
+<!-- MESSAGE SENT BY CHATBOT -->
+<div *ngIf="sentByClient === false">
+    <div class="message">
+        <div class="icon">
+            <i class="material-icons">smart_toy</i>
+        </div>
+        <div class="body">
+            <p>{{message}}</p>
+            <div *ngIf="optionsList.length >= 1" class="options">
+                <div *ngFor="let option of optionsList">
+                    <button mat-stroked-button>{{option}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MESSAGE SENT BY CLIENT -->
+<div *ngIf="sentByClient === true">
+    <div class="message">
+        <div class="body-reversed">
+            <p>{{message}}</p>
+        </div>
+    </div>
+</div>
