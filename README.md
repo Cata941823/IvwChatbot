@@ -1,4 +1,4 @@
-# APP can be accessed at:
+# APP can be accessed via any device type (mobile, tablet and larger screens) at:
 https://ivwchatbot.web.app/
 
 # IvwChatbot
