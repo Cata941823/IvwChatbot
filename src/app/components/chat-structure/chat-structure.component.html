@@ -18,7 +18,7 @@
 
         <!-- TRANSLATION -->
         <div class="translation">
-            <div class="fixed-size-icon" (click)="changeLanguage(language.code, language.language, language.flag)">
+            <div class="fixed-size-icon" (click)="changeLanguage(language)">
                 <i class="material-icons">language</i><span>{{(language.code | uppercase)}}</span>
             </div>
         </div>
@@ -33,7 +33,7 @@
     </div>
 
     <!-- CHAT BODY -->
-    <div class="body">
+    <div class="body" id="abc">
         <div *ngFor="let message of chatMessages">
             <app-chat-message [sentByClient]="message.sentByClient" [message]="message.text" [optionsList]="message.optionsList" (selectedOption)="replyToMessage($event)"></app-chat-message>
         </div>

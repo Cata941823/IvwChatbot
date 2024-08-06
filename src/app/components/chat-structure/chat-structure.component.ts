@@ -3,6 +3,8 @@ import { FormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { InteractionService } from 'src/app/services/interaction/interaction.service';
 import { StocksService } from 'src/app/services/stocks/stocks.service';
+import { ChatMessage } from 'src/app/types/chat-message.type';
+import { Language } from 'src/app/types/language.type';
 import { QuestionType } from 'src/app/types/question-type.type';
 
 @Component({
@@ -11,14 +13,7 @@ import { QuestionType } from 'src/app/types/question-type.type';
   styleUrls: ['./chat-structure.component.css'],
 })
 export class ChatStructureComponent {
-  messageFormControl = new FormControl();
-  lastSelectedGroup: string = '';
-  chatMessages: {
-    sentByClient: boolean;
-    text: string;
-    optionsList: string[];
-    questionType: QuestionType;
-  }[] = [
+  chatMessages: ChatMessage[] = [
     {
       sentByClient: false,
       text: 'WELCOME_MESSAGE',
@@ -32,11 +27,13 @@ export class ChatStructureComponent {
       questionType: QuestionType.STOCKGROUP,
     },
   ];
-  languages = [
+  language: Language = this.interactionService.getLanguage();
+  languages: Language[] = [
     { code: 'en', language: 'English', flag: 'assets/img/UK.png' },
     { code: 'ro', language: 'Romanian', flag: 'assets/img/RO.png' },
   ];
-  language = this.interactionService.getLanguage();
+  lastSelectedGroup: string = '';
+  messageFormControl = new FormControl();
 
   constructor(
     private stocksService: StocksService,
@@ -44,44 +41,106 @@ export class ChatStructureComponent {
     private interactionService: InteractionService
   ) {}
 
-  changeLanguage(code: string, language: string, flag: string) {
-    if(code === "en") {
-      this.language = { code: 'ro', language: 'Romanian', flag: 'assets/img/RO.png' };
+  /**
+   * Changes the current language of the app.
+   */
+  changeLanguage(language: Language) {
+    if (language.code === 'en') {
+      this.language = {
+        code: 'ro',
+        language: 'Romanian',
+        flag: 'assets/img/RO.png',
+      };
       localStorage.setItem('language', 'ro');
       this.translate.use(
         localStorage.getItem('language')
           ? localStorage.getItem('language')!.toString()
           : 'en'
       );
-      } else {
-      this.language = { code: 'en', language: 'English', flag: 'assets/img/UK.png' };
+    } else {
+      this.language = {
+        code: 'en',
+        language: 'English',
+        flag: 'assets/img/UK.png',
+      };
       localStorage.setItem('language', 'en');
       this.translate.use(
         localStorage.getItem('language')
           ? localStorage.getItem('language')!.toString()
           : 'en'
-      );  
+      );
     }
   }
 
+  /**
+   * On "Go Back" selection of the client, display the previous question.
+   */
+  displayPreviousQuestion() {
+    let lastQuestionType =
+      this.chatMessages[this.chatMessages.length - 2].questionType;
+    switch (lastQuestionType) {
+      case QuestionType.STOCKITEM:
+        for (let i = this.chatMessages.length - 1; i >= 0; i--) {
+          if (this.chatMessages[i].questionType === QuestionType.STOCKGROUP) {
+            this.chatMessages.push(this.chatMessages[i]);
+            return;
+          }
+        }
+        break;
+      case QuestionType.STOCKPRICE:
+        for (let i = this.chatMessages.length - 1; i >= 0; i--) {
+          if (this.chatMessages[i].questionType === QuestionType.STOCKITEM) {
+            this.chatMessages.push(this.chatMessages[i]);
+            return;
+          }
+        }
+        break;
+    }
+  }
+
+  /**
+   * Opens browser printing section.
+   */
   exportChat() {
-    let originalContents = document.body.innerHTML;
-    let printReport= document.querySelector('.body')!.innerHTML;
-    document.body.innerHTML = printReport;
-    window.print();
-    document.body.innerHTML = originalContents;
-  }
-
-  sendMessage() {
-    this.chatMessages.push({
-      sentByClient: true,
-      text: this.messageFormControl.value,
-      optionsList: [],
-      questionType: QuestionType.NONE,
+    let printReport = document.querySelector('.body')!.innerHTML;
+    let printContainer = document.createElement('div');
+    
+    printContainer.innerHTML = printReport;
+    document.body.appendChild(printContainer);
+    Array.from(document.body.children).forEach((child) => {
+      if (child !== printContainer) {
+        (child as HTMLElement).style.display = 'none';
+      }
     });
-    this.getReply(this.messageFormControl.value);
+    window.print();
+    document.body.removeChild(printContainer);
+    Array.from(document.body.children).forEach((child) => {
+      (child as HTMLElement).style.display = '';
+    });
   }
 
+  /**
+   * On "Main menu" selection of the client, display the initial question (selection of stock exchange groups).
+   * @returns list of stocks exchange from the JSON server (string[])
+   */
+  getMainMenuList(): string[] {
+    let response: string[] = [];
+
+    this.stocksService.getStocks().subscribe(
+      (data) => {
+        data.map((element: any) => response.push(element.stockExchange));
+      },
+      () => {
+        response = [];
+      }
+    );
+
+    return response;
+  }
+
+  /**
+   * Get reply from the chatbot.
+   */
   getReply(message: string) {
     if (
       this.chatMessages[this.chatMessages.length - 2].optionsList.includes(
@@ -89,7 +148,7 @@ export class ChatStructureComponent {
       )
     ) {
       if (message === 'OPTIONS.GO_BACK') {
-        this.displayParentQuestion();
+        this.displayPreviousQuestion();
       }
       if (message === 'OPTIONS.MAIN_MENU') {
         this.chatMessages.push({
@@ -130,9 +189,7 @@ export class ChatStructureComponent {
             );
             tempStocks.map((element: any) =>
               element.stockName === message
-                ? (newText =
-                    message + ": " +
-                    element.price )
+                ? (newText = message + ': ' + element.price)
                 : null
             );
             newQuestionType = QuestionType.STOCKPRICE;
@@ -147,49 +204,9 @@ export class ChatStructureComponent {
     this.messageFormControl.setValue('');
   }
 
-  displayParentQuestion() {
-    let lastQuestionType =
-      this.chatMessages[this.chatMessages.length - 2].questionType;
-    switch (lastQuestionType) {
-      case QuestionType.STOCKITEM:
-        for (let i = this.chatMessages.length - 1; i >= 0; i--) {
-          if (this.chatMessages[i].questionType === QuestionType.STOCKGROUP) {
-            this.chatMessages.push(this.chatMessages[i]);
-            return;
-          }
-        }
-        break;
-      case QuestionType.STOCKPRICE:
-        for (let i = this.chatMessages.length - 1; i >= 0; i--) {
-          if (this.chatMessages[i].questionType === QuestionType.STOCKITEM) {
-            this.chatMessages.push(this.chatMessages[i]);
-            return;
-          }
-        }
-        break;
-    }
-  }
-
-  getMainMenuList(): string[] {
-    let response: string[] = [];
-
-    this.stocksService.getStocks().subscribe((data) => {
-      data.map((element: any) => response.push(element.stockExchange));
-    });
-    return response;
-  }
-
-  replyToMessage(event: any) {
-    if (
-      this.chatMessages[this.chatMessages.length - 1].optionsList.includes(
-        event
-      )
-    ) {
-      this.messageFormControl.setValue(event);
-      this.sendMessage();
-    }
-  }
-
+  /**
+   * Addition of the new reply to the chat array of messages.
+   */
   pushReplyToArray(
     newText: string,
     newOptionsList: string[],
@@ -203,5 +220,32 @@ export class ChatStructureComponent {
       optionsList: newOptionsList,
       questionType: newQuestionType,
     });
+  }
+
+  /**
+   * Check if the client answer matches the previous chatbot reply options and then call sendMessage to send the client message and retrieve a reply for it.
+   */
+  replyToMessage(event: any) {
+    if (
+      this.chatMessages[this.chatMessages.length - 1].optionsList.includes(
+        event
+      )
+    ) {
+      this.messageFormControl.setValue(event);
+      this.sendMessage();
+    }
+  }
+
+  /**
+   * Pushes client message and gets reply for it from the chatbot.
+   */
+  sendMessage() {
+    this.chatMessages.push({
+      sentByClient: true,
+      text: this.messageFormControl.value,
+      optionsList: [],
+      questionType: QuestionType.NONE,
+    });
+    this.getReply(this.messageFormControl.value);
   }
 }

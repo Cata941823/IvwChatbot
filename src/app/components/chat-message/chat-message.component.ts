@@ -12,6 +12,9 @@ export class ChatMessageComponent {
   
   @Output() selectedOption = new EventEmitter<string>();
   
+  /**
+   * Send back to parent component the option selected by the client from the chatbot reply options list.
+   */
   selectOption(option: string){
     this.selectedOption.emit(option);
   }
